@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <style> body {  margin:  50px 100px 200px 200px;} </style>
+</head>
+<style>
+.header {
+    padding: 20px;
+    text-align: center;
+    background: #f3f4ec00;
+    color:rgb(21, 21, 21);
+    font-size: 15px;
+  }
+</style>
+<style>
+form {
+  width: 70%;
+  background: rgb(252, 246, 246);
+  margin-left: 100px ;
+
+}
+    /* Style inputs, select elements and textareas */
+input, select, textarea{
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  box-sizing: content-box;
+  font-size: 15px;
+  resize: horizontal;
+  margin-left: 200px;
+}
+
+/* Style the label to display next to the inputs */
+label {
+  padding: 12px 12px 12px 12px;
+  display: inline-block;
+  font-size: 18px;
+  text-align: left;
+  width: 1000px;
+  color: rgb(103, 103, 103);
+  font-weight: 550;
+}
+
+/* Style the submit button */
+input[type=button] {
+    background-color: #cbcece;
+    width: 150px;
+    margin-left: 250px ;
+    margin-top: 50px ;
+}
+
+/* Style the container */
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+/* Floating column for labels: 25% width */
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+/* Floating column for inputs: 75% width */
+.col-75 {
+  float: left;
+  width: 15%;
+  margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.new {
+margin-left: 100px;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=button] {
+    width: 100%;
+    margin-top: 0;
+  }
+</style>
+<h:body>
+    <ui:composition template ="template.xhtml"
+
+<div class='top-left'> &nbsp;
+    <img src="https://stanfordbloodcenter.org/wp-content/themes/sbc/img/logo.png" width="200" 
+    height="50>
+    <div style="display: flex;">
+        <div></div>
+    </div>
+</div>
+
+<div class="header">
+    <h1> Product Split</h1>
+</div>
+
+<body>
+    <form action="">
+        <div class="row">
+            <div class="col-25">
+                <label for = "Platelet Type:">Choose Platelet type</label>
+            </div>
+            <div class="col-75">
+                    <select name="Platelet Type:" id="Type" align="right">
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Triple">Triple</option>
+                    </select><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">        
+                <label for = "Mother Bag Platelet Count">Enter Mother Bag Platelet Count <br/> <font size="-0.5">[Single - A5022; Double/Triple - A5023]</font></label>
+            </div>
+            <div class="col-75">
+                <input type = "number" name = "Mother Bag Platelet Count" id="pltcount1"  required>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-25">    
+                <label for = "PRT Post CAD Yield Weight">Enter PRT Post CAD Weight (in g)</label>
+            </div>   
+            <div class="col-75">    
+                <input type = "number" name = "PRT Post CAD Yield Weight" id="weight2" required><br/>
+            </div>
+        </div> 
+
+            <div>&nbsp;
+                <input type="button" id="sub" value="Calculate" onclick="myFunction()">
+                <p> </p><p id="text1"> </p> <!-- result will be here -->
+                <p> </p><p id="yield"> </p> <!-- result will be here -->
+                <p> </p><p id="text2"> </p><!-- result will be here -->
+                <p> </p><p id="prd"> </p><!-- result will be here -->
+            </div>&nbsp;
+   
+      </form>
+    </h:body>
+</body>
+<script>
+
+    function displayText1() { 
+    var text1;
+    text1= "Calculated Post CAD Yield (x 10^11)";
+    document.getElementById('text1').innerHTML = text1;
+    document.getElementById('text1').style.fontSize = "18px";
+    document.getElementById('text1').style.fontWeight = "900";
+}
+function displayText2() { 
+    var text2;
+    text2= "Final Product (1st Part) Suggested";
+    document.getElementById('text2').innerHTML = text2;
+    document.getElementById('text2').style.fontSize = "18px";
+    document.getElementById('text2').style.fontWeight = "900";
+}
+
+    function naiveRound(num, decimalPlaces = 0) {
+    var p = Math.pow(10, decimalPlaces);
+    return Math.round(num * p) / p;
+}
+    function yieldCalc() {
+    var pltcount1;
+    var weight2;
+    var yield;
+    var result = document.getElementById('yield')
+    pltcount1 = document.getElementById("pltcount1").value;
+     weight2 = document.getElementById("weight2").value;  
+    yield = (pltcount1*(weight2/1.03)* 1000 * 1000)*0.95/100000000000;
+   result.innerHTML =naiveRound(yield,2)
+   document.getElementById('yield').style.fontSize = "18px";
+    document.getElementById('yield').style.color = "black";
+    document.getElementById('yield').style.padding = "10px";
+    document.getElementById('yield').style.backgroundColor = "#94f1f8";
+}
+function findprd() {
+    var pltcount1;
+    var weight2;
+    var yld;
+    var Type;
+    var prd;
+    pltcount1 = document.getElementById("pltcount1").value;
+    weight2 = document.getElementById("weight2").value;  
+    yld = (pltcount1*(weight2/1.03)* 1000 * 1000)*0.95/100000000000;
+    Type = document.getElementById('Type');
+    if (Type = 'Single' && yld >=2.00 && yld<3.00 ) 
+    {
+        prd = "E8335 (PRT-PAL-VAR)";
+    } else if (Type = 'Single' && yld >=3.00 && yld < 5.04) {
+        prd = "E8331 (PRT-PAL)";
+    } else if (Type != 'Single' && yld >=2.00 && yld < 3.00) {
+        prd = "E8335 (PRT-PAL-VAR)";
+    }else if (Type != 'Single' && yld >=3.00 && yld < 4.00) {
+        prd = "E8331 (PRT-PAL)";
+    }else if (Type != 'Single' && yld >=4.00 && yld < 5.95) {
+        prd = "E8971 AND E8972 (Variable)";
+    }else if (Type != 'Single' && yld >=5.95 && yld < 10.4) {
+        prd = "E8332 AND E8333";
+    }
+    document.getElementById('prd').innerHTML = prd
+    document.getElementById('prd').style.fontSize = "18px";
+    document.getElementById('prd').style.color = "black";
+    document.getElementById('prd').style.padding = "10px";
+    document.getElementById('prd').style.backgroundColor = "#94f1f8";
+};
+function myFunction(){
+    displayText1();
+    yieldCalc();
+    displayText2();
+    findprd() ;
+}
+</script>
+
